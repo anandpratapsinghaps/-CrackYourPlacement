@@ -1,0 +1,16 @@
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, 1);
+        int countOdd = 0; 
+        int result = 0;
+        for (int num : nums) {
+            countOdd += num % 2;
+            if (map.containsKey(countOdd - k)) {
+                result += map.get(countOdd - k);
+            }
+            map.put(countOdd, map.getOrDefault(countOdd, 0) + 1);
+        }
+        return result;
+    }
+}
