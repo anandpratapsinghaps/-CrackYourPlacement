@@ -1,110 +1,86 @@
-// Java program to arrange
-// linked list in zigzag fashion
-class GfG {
+public class ZIgZagLL {
+    
+    public static class Node{
+        int data;
+        Node next;
 
-	/* Link list Node */
-	static class Node {
-		int data;
-		Node next;
-	}
-	static Node head = null;
-	static int temp = 0;
+        public Node(int data){
+            this.data = data;
+            this.next = null;
+        }
+    }
+    public static Node head;
+    public static Node tail;
 
-	// This function distributes
-	// the Node in zigzag fashion
-	static void zigZagList(Node head)
-	{
-		// If flag is true, then
-		// next node should be greater
-		// in the desired output.
-		boolean flag = true;
+    public void addFirst(int data){
+        Node newNode = new Node(data);
+        if(head == null){
+            head = tail = newNode;
+        }
+        else{
+            newNode.next = head;
+            head = newNode;
+        }
+    }
+    public void printLL(){
+        if(head == null){
+            System.out.println("kuch nhi hai");
+        }
+        Node temp = head;
+        while(temp != null){
+            System.out.print(temp.data + "-->");
+            temp = temp.next;
+        }
+        System.out.println("null");
+    }
 
-		// Traverse linked list starting from head.
-		Node current = head;
-		while (current != null && current.next != null) {
-			if (flag == true) /* "<" relation expected */
-			{
-				/* If we have a situation like A > B > C 
-			where A, B and C are consecutive Nodes 
-			in list we get A > B < C by swapping B 
-			and C */
-				if (current.data > current.next.data) {
-					temp = current.data;
-					current.data = current.next.data;
-					current.next.data = temp;
-				}
-			}
-			else /* ">" relation expected */
-			{
-				/* If we have a situation like A < B < C where 
-			A, B and C are consecutive Nodes in list we 
-			get A < C > B by swapping B and C */
-				if (current.data < current.next.data) {
-					temp = current.data;
-					current.data = current.next.data;
-					current.next.data = temp;
-				}
-			}
+    public void zigzag(){
+        //find mid
+        Node slow = head;
+        Node fast = head.next;
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        Node mid = slow;
 
-			current = current.next;
+        //reverse second half
+        Node curr = mid.next;
+        mid.next = null;
+        Node prev = null;
+        Node next;
+        while(curr != null){
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        Node LH = head;
+        Node RH = prev;
+        Node nextL, nextR;
 
-			/* flip flag for reverse checking */
-			flag = !(flag);
-		}
-	}
+        //merge in zig zag
+        while(LH != null && RH != null){
+            nextL = LH.next;
+            LH.next = RH;
+            nextR= RH.next;
+            RH.next = nextL;
+            LH = nextL;
+            RH = nextR;
+        }
+    }
 
-	/* UTILITY FUNCTIONS */
-	/* Function to push a Node */
-	static void push(int new_data)
-	{
-		/* allocate Node */
-		Node new_Node = new Node();
-
-		/* put in the data */
-		new_Node.data = new_data;
-
-		/* link the old list of the new Node */
-		new_Node.next = (head);
-
-		/* move the head to point to the new Node */
-		(head) = new_Node;
-	}
-
-	/* Function to print linked list */
-	static void printList(Node Node)
-	{
-		while (Node != null) {
-			System.out.print(Node.data + "->");
-			Node = Node.next;
-		}
-		System.out.println("NULL");
-	}
-
-	/* Driver code*/
-	public static void main(String[] args)
-	{
-		/* Start with the empty list */
-		// Node head = null;
-
-		// create a list 4 -> 3 -> 7 -> 8 -> 6 -> 2 -> 1
-		// answer should be -> 3 7 4 8 2 6 1
-		push(1);
-		push(2);
-		push(6);
-		push(8);
-		push(7);
-		push(3);
-		push(4);
-
-		System.out.println("Given linked list ");
-		printList(head);
-
-		zigZagList(head);
-
-		System.out.println("Zig Zag Linked list ");
-		printList(head);
-	}
+    public static void main(String[] args) {
+        ZIgZagLL ll = new ZIgZagLL();
+        ll.addFirst(6);
+        ll.addFirst(5);
+        ll.addFirst(4);
+        ll.addFirst(3);
+        ll.addFirst(2);
+        ll.addFirst(1);
+        ll.printLL();
+        ll.zigzag();
+        ll.printLL();
+    }
 }
 
-// This code is contributed by
-// Prerna Saini.
